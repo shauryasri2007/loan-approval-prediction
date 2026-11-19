@@ -37,7 +37,6 @@ data = pd.DataFrame({
 })
 
 # Step 3: Generate loan approval status
-# 1 = Approved, 0 = Rejected
 
 score = (
     (data['credit_score'] >= 650) * 2 +
@@ -76,7 +75,6 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # Step 7: Create Logistic Regression model
-# Scaling is important for Logistic Regression
 
 model = Pipeline([
     ('scaler', StandardScaler()),
@@ -104,7 +102,7 @@ print("--------------------------------")
 
 print("Model Accuracy:", round(accuracy * 100, 2), "%")
 
-# Step 11: Classification report
+# Step 11: Classification Report
 
 print("\nClassification Report:")
 print(classification_report(y_test, y_pred))
@@ -136,8 +134,17 @@ new_applicant = pd.DataFrame([{
     'employment_years': 5,
     'existing_loans': 1,
     'debt_to_income': 0.25,
-    'education_Graduate': 1
+    'education_Not Graduate': 0
 }])
+
+# Ensure columns match the training dataset
+
+new_applicant = new_applicant.reindex(
+    columns=X.columns,
+    fill_value=0
+)
+
+# Make prediction
 
 prediction = model.predict(new_applicant)
 
@@ -154,3 +161,4 @@ print(
     "Approval Probability:",
     round(probability[0][1] * 100, 2), "%"
 )
+
